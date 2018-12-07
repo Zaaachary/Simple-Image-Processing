@@ -3,9 +3,7 @@ from tkinter.filedialog import askopenfilename
 import processing as pc
 from PIL import Image, ImageTk
 
-import matplotlib
-from matplotlib.pylab import mpl
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg,NavigationToolbar2Tk #NavigationToolbar2TkAgg
+
 
 
 image_file = None
@@ -38,41 +36,27 @@ def open_image():
     image_file = Image.open(filepath)
     # 期望图像显示的大小
     w_box = 500
-    h_box = 700
-    showimg(image_file, imgleft, w_box,h_box)
-    showimg(image_file, imgright,w_box,h_box)
+    h_box = 300
+    showimg(image_file, imgleft, w_box, h_box)
+    showimg(image_file, imgright, w_box, h_box)
 
 
 def save_image():
     pass
 
-
 def hst_eql():
-    PILimg, PIL_gary = pc.hist_eql(image_file)
+    PIL_eq, PIL_gary = pc.hist_eql(image_file)
     # 期望图像显示的大小
     w_box = 500
-    h_box = 700
+    h_box = 300
+    showimg(PIL_gary, imgleft, w_box, h_box)
+    histO = Image.open('images/templeft.png')
+    showimg(histO, histleft, w_box,h_box )
 
-    # 缩放图像让它保持比例，同时限制在一个矩形框范围内
-    w, h = PIL_gary.size
-    img_resize = resize(w, h, w_box, h_box, PIL_gary)
-    # 将image转换成ImageTk
-    originimage = ImageTk.PhotoImage(image=img_resize)
-    # imgleft 更新图片
-    imgleft.config(image=originimage)
-    imgleft.image = originimage
-    pc.drawHist(PIL_gary,'left')
-    # draw_hist(PIL_gary, 'left')
-
-    # 缩放图像让它保持比例，同时限制在一个矩形框范围内
-    w, h = PILimg.size
-    img_resize = resize(w, h, w_box, h_box, PILimg)
-    # 将image转换成ImageTk
-    proceimage = ImageTk.PhotoImage(image=img_resize)
-    # imgright 更新图片
-    imgright.config(image=proceimage)
-    imgright.image = proceimage
-    pc.drawHist(PILimg,'right')
+    showimg(PIL_eq, imgright, w_box, h_box)
+    histE = Image.open('images/tempright.png')
+    showimg(histE, histright, w_box,h_box )
+    # pc.drawHist(PIL_img,'right')
     # draw_hist(PILimg, 'right')
 
 
@@ -119,7 +103,7 @@ def edge():
 
 root = tk.Tk()
 root.title('简单的图像处理')
-root.geometry('1300x768')
+root.geometry('1100x700')
 
 # 菜单栏
 menubar = tk.Menu(root)
@@ -142,10 +126,15 @@ frm_right = tk.Frame(frm)
 frm_left.pack(side='left')
 frm_right.pack(side='right')
 
-imgleft = tk.Label(frm_left,bg='blue')
-imgright = tk.Label(frm_right,bg='yellow')
+imgleft = tk.Label(frm_left)
+histleft = tk.Label(frm_left)
+
+imgright = tk.Label(frm_right)
+histright = tk.Label(frm_right)
 imgleft.pack()
+histleft.pack()
 imgright.pack()
+histright.pack()
 # canvasl = tk.Canvas(frm_left, bg='white').pack()
 # canvasr = tk.Canvas(frm_right, bg='white').pack()
 
