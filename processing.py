@@ -4,6 +4,7 @@ from PIL import Image
 from matplotlib import pyplot as plt
 
 
+
 def PIL_img2CV_img(PILimg):
     CVimg = cv2.cvtColor(np.asarray(PILimg), cv2.COLOR_RGB2BGR)
     return CVimg
@@ -25,10 +26,10 @@ def hist_eql(pil_img):
     # 变换为BIL图返回
     PIL_img_gray = CV_img2PIL_img(CV_img_gray)
     PIL_img_eq = CV_img2PIL_img(CV_img_eq)
-    return PIL_img_eq,PIL_img_gray
+    return PIL_img_eq, PIL_img_gray
 
 
-def drawHist(pil_img):
+def drawHist(pil_img, side):
     # 图像直方图
     image = PIL_img2CV_img(pil_img)
     hist = cv2.calcHist([image], [0], None, [256], [0, 256])
@@ -39,4 +40,4 @@ def drawHist(pil_img):
     plt.plot(hist)  # 画图
     plt.xlim([0, 256])  # 设置x坐标轴范围
     # plt.show()  # 显示图像
-    return f
+    plt.savefig('images/temp'+side)

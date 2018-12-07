@@ -39,16 +39,8 @@ def open_image():
     # 期望图像显示的大小
     w_box = 500
     h_box = 700
-    # 缩放图像让它保持比例，同时限制在一个矩形框范围内
-    w, h = image_file.size
-    img_resize = resize(w, h, w_box, h_box, image_file)
-    # 将image转换成ImageTk
-    originimage = ImageTk.PhotoImage(image=img_resize)
-    # imgleft更新图片
-    imgleft.config(image=originimage)
-    imgleft.image = originimage
-    imgright.config(image=originimage)
-    imgleft.image = originimage
+    showimg(image_file, imgleft, w_box,h_box)
+    showimg(image_file, imgright,w_box,h_box)
 
 
 def save_image():
@@ -66,34 +58,57 @@ def hst_eql():
     img_resize = resize(w, h, w_box, h_box, PIL_gary)
     # 将image转换成ImageTk
     originimage = ImageTk.PhotoImage(image=img_resize)
-    # imgleft更新图片
+    # imgleft 更新图片
     imgleft.config(image=originimage)
     imgleft.image = originimage
-    draw_hist(PIL_gary,'left')
+    pc.drawHist(PIL_gary,'left')
+    # draw_hist(PIL_gary, 'left')
 
     # 缩放图像让它保持比例，同时限制在一个矩形框范围内
     w, h = PILimg.size
     img_resize = resize(w, h, w_box, h_box, PILimg)
     # 将image转换成ImageTk
     proceimage = ImageTk.PhotoImage(image=img_resize)
-    # imgright更新图片
+    # imgright 更新图片
     imgright.config(image=proceimage)
     imgright.image = proceimage
-    draw_hist(PILimg,'right')
+    pc.drawHist(PILimg,'right')
+    # draw_hist(PILimg, 'right')
+
+
+def showimg(PIL_img, master, width, height):
+    """
+    :param PIL_img:要显示的图片
+    :param master: 需要在这个元素中显示
+    :param width: 期望的最大宽度
+    :param height: 期望的最大高度
+    :return: nothing
+    """
+    # 获取图像参数
+    w, h = PIL_img.size
+    # 缩放图像
+    img_resize = resize(w, h, width, height, PIL_img)
+    # Image 2 ImageTk
+    Tk_img = ImageTk.PhotoImage(image=img_resize)
+    # master显示图片
+    master.config(image=Tk_img)
+    master.image = Tk_img
 
 
 
-def draw_hist(PIL_gary,side):
-    if side =='left':
-        figure = pc.drawHist(PIL_gary)
-        canvasl = FigureCanvasTkAgg(figure, frm_left)
-        canvasl.draw()
-        canvasl.get_tk_widget().pack(side=tk.TOP,fill=tk.BOTH,expand=1)
-    else:
-        figure = pc.drawHist(PIL_gary)
-        canvasr = FigureCanvasTkAgg(figure, frm_right)
-        canvasr.draw()
-        canvasr.get_tk_widget().pack(side=tk.TOP,fill=tk.BOTH,expand=1)
+
+
+# def draw_hist(PIL_gary, side):
+#     if side =='left':
+#         figure = pc.drawHist(PIL_gary)
+#         l = FigureCanvasTkAgg(figure, frm_left)
+#         l.draw()
+#         l.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+#     else:
+#         figure = pc.drawHist(PIL_gary)
+#         canvasr = FigureCanvasTkAgg(figure, frm_right)
+#         canvasr.draw()
+#         canvasr.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
 
 def edge():
@@ -104,7 +119,7 @@ def edge():
 
 root = tk.Tk()
 root.title('简单的图像处理')
-root.geometry('1152x768')
+root.geometry('1300x768')
 
 # 菜单栏
 menubar = tk.Menu(root)
@@ -131,9 +146,8 @@ imgleft = tk.Label(frm_left,bg='blue')
 imgright = tk.Label(frm_right,bg='yellow')
 imgleft.pack()
 imgright.pack()
-
-canvasl = tk.Canvas()
-canvasr = tk.Canvas()
+# canvasl = tk.Canvas(frm_left, bg='white').pack()
+# canvasr = tk.Canvas(frm_right, bg='white').pack()
 
 
 root.config(menu=menubar)
