@@ -45,7 +45,9 @@ def save_image():
     pass
 
 def hst_eql():
+    global proceimage
     PIL_eq, PIL_gary = pc.hist_eql(image_file)
+    proceimage = PIL_eq
     # 期望图像显示的大小
     w_box = 500
     h_box = 300
