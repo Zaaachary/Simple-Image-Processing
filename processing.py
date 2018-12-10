@@ -43,3 +43,11 @@ def save_hist(cv_img, side):
     plt.xlim([0, 256])  # 设置x坐标轴范围
     # plt.show()  # 显示图像
     plt.savefig('images/temp'+side)
+
+
+def edge_detect(PIL_img):
+    CV_img = PIL_img2CV_img(PIL_img)
+    CV_gray = cv2.cvtColor(CV_img, cv2.COLOR_BGR2GRAY)
+    # Canny函数，三个参数：源图像，低阈值，高阈值
+    CV_detected = cv2.Canny(CV_img, 100, 300)
+    return CV_img2PIL_img(cv2.cvtColor(CV_detected, cv2.COLOR_GRAY2BGR))
