@@ -3,9 +3,6 @@ from tkinter.filedialog import askopenfilename
 import processing as pc
 from PIL import Image, ImageTk
 
-
-
-
 image_file = None
 originimage = None
 proceimage = None
@@ -17,13 +14,13 @@ def resize(w, h, w_box, h_box, pil_image):
     a box of size w_box times h_box, but retain aspect ratio
     对一个pil_image对象进行缩放，让它在一个矩形框内，还能保持比例
     '''
-    f1 = 1.0*w_box/w # 1.0 forces float division in Python2
-    f2 = 1.0*h_box/h
+    f1 = 1.0 * w_box / w  # 1.0 forces float division in Python2
+    f2 = 1.0 * h_box / h
     factor = min([f1, f2])
-    #print(f1, f2, factor) # test
+    # print(f1, f2, factor) # test
     # use best down-sizing filter
-    width = int(w*factor)
-    height = int(h*factor)
+    width = int(w * factor)
+    height = int(h * factor)
     # 使用resize进行缩放
     return pil_image.resize((width, height), Image.ANTIALIAS)
 
@@ -36,13 +33,15 @@ def open_image():
     image_file = Image.open(filepath)
     # 期望图像显示的大小
     w_box = 500
-    h_box = 300
+    h_box = 350
     showimg(image_file, imgleft, w_box, h_box)
     showimg(image_file, imgright, w_box, h_box)
 
 
 def save_image():
-    pass
+    global proceimage
+    proceimage.save('images/processed.jpg')
+
 
 def hst_eql():
     global proceimage
@@ -50,14 +49,14 @@ def hst_eql():
     proceimage = PIL_eq
     # 期望图像显示的大小
     w_box = 500
-    h_box = 300
+    h_box = 350
     showimg(PIL_gary, imgleft, w_box, h_box)
     histO = Image.open('images/templeft.png')
-    showimg(histO, histleft, w_box,h_box )
+    showimg(histO, histleft, w_box, h_box)
 
     showimg(PIL_eq, imgright, w_box, h_box)
     histE = Image.open('images/tempright.png')
-    showimg(histE, histright, w_box,h_box )
+    showimg(histE, histright, w_box, h_box)
     # pc.drawHist(PIL_img,'right')
     # draw_hist(PILimg, 'right')
 
@@ -81,31 +80,25 @@ def showimg(PIL_img, master, width, height):
     master.image = Tk_img
 
 
-
-
-
-# def draw_hist(PIL_gary, side):
-#     if side =='left':
-#         figure = pc.drawHist(PIL_gary)
-#         l = FigureCanvasTkAgg(figure, frm_left)
-#         l.draw()
-#         l.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-#     else:
-#         figure = pc.drawHist(PIL_gary)
-#         canvasr = FigureCanvasTkAgg(figure, frm_right)
-#         canvasr.draw()
-#         canvasr.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
-
 def edge():
-    pass
-
-
+    PIL_detect = pc.edge_detect(image_file)
+    global proceimage 
+    proceimage = PIL_detect
+    # 期望图像显示的大小
+    w_box = 500
+    h_box = 350
+    showimg(image_file, imgleft, w_box, h_box)
+    showimg(PIL_detect, imgright, w_box, h_box)
+    histleft.config(image=None)
+    histleft.image = None
+    histright.config(image=None)
+    histright.image = None
 
 
 root = tk.Tk()
 root.title('简单的图像处理')
 root.geometry('1100x700')
+root.config(bg='white')
 
 # 菜单栏
 menubar = tk.Menu(root)
@@ -119,20 +112,20 @@ menubar.add_cascade(label='文件', menu=filemenu)
 menubar.add_cascade(label='操作', menu=operate)
 
 # 在window上创建一个frame
-frm = tk.Frame(root)
+frm = tk.Frame(root, bg='white')
 frm.pack()
 # 在创建好的frame上创建两个frame 即frm下有两个frame
-frm_left = tk.Frame(frm)
-frm_right = tk.Frame(frm)
+frm_left = tk.Frame(frm, bg='white')
+frm_right = tk.Frame(frm, bg='white')
 # 控制两个小的frm在大的相对位置
 frm_left.pack(side='left')
 frm_right.pack(side='right')
 
-imgleft = tk.Label(frm_left)
-histleft = tk.Label(frm_left)
+imgleft = tk.Label(frm_left, bg='white')
+histleft = tk.Label(frm_left, bg='white')
 
-imgright = tk.Label(frm_right)
-histright = tk.Label(frm_right)
+imgright = tk.Label(frm_right, bg='white')
+histright = tk.Label(frm_right, bg='white')
 imgleft.pack()
 histleft.pack()
 imgright.pack()
