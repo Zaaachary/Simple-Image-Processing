@@ -39,11 +39,14 @@ def open_image():
 
 
 def save_image():
-    pass
+    global proceimage
+    proceimage.save('images/processed.jpg')
 
 
 def hst_eql():
+    global proceimage
     PIL_eq, PIL_gary = pc.hist_eql(image_file)
+    proceimage = PIL_eq
     # 期望图像显示的大小
     w_box = 500
     h_box = 350
@@ -77,21 +80,10 @@ def showimg(PIL_img, master, width, height):
     master.image = Tk_img
 
 
-# def draw_hist(PIL_gary, side):
-#     if side =='left':
-#         figure = pc.drawHist(PIL_gary)
-#         l = FigureCanvasTkAgg(figure, frm_left)
-#         l.draw()
-#         l.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-#     else:
-#         figure = pc.drawHist(PIL_gary)
-#         canvasr = FigureCanvasTkAgg(figure, frm_right)
-#         canvasr.draw()
-#         canvasr.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
-
 def edge():
     PIL_detect = pc.edge_detect(image_file)
+    global proceimage 
+    proceimage = PIL_detect
     # 期望图像显示的大小
     w_box = 500
     h_box = 350
