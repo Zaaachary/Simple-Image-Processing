@@ -102,6 +102,17 @@ def edge():
     histright.config(image=None)
     histright.image = None
 
+def Otsu():
+    PIL_gary,PIL_Otsu = pc.Otus_hold(image_file)
+    w_box = 500
+    h_box = 350
+    showimg(PIL_gary, imgleft, w_box, h_box)
+    showimg(PIL_Otsu, imgright, w_box, h_box)
+    histleft.config(image=None)
+    histleft.image = None
+    histright.config(image=None)
+    histright.image = None
+    
 
 root = tk.Tk()
 root.title('简单的图像处理')
@@ -116,6 +127,7 @@ filemenu.add_command(label='保存', command=save_image)
 operate = tk.Menu(menubar, tearoff=0)
 operate.add_command(label='直方图均衡化', command=hst_eql)
 operate.add_command(label='边缘检测', command=edge)
+operate.add_command(label='大津阈值法',command=Otsu)
 menubar.add_cascade(label='文件', menu=filemenu)
 menubar.add_cascade(label='操作', menu=operate)
 

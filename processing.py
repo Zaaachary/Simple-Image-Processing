@@ -51,3 +51,53 @@ def edge_detect(PIL_img):
     # Canny函数，三个参数：源图像，低阈值，高阈值
     CV_detected = cv2.Canny(CV_img, 100, 300)
     return CV_img2PIL_img(cv2.cvtColor(CV_detected, cv2.COLOR_GRAY2BGR))
+
+
+def Otus_hold(PIL_img):
+    im = PIL_img.convert('L')
+    mt = np.asarray(im)
+
+    w,h = mt.shape
+    grayScale = 256 # 灰度级256级
+    pixCount = np.zeros(grayScale)   # 每个灰度值像素统计
+    pixSum = w*h
+    pixPro = np.zeros(256)     # 每个灰度值所占像素比例
+    th = -1
+    deltaMax = 0
+    w0 = w1 = u0tmp = u1tmp = u0 = u1 =deltaTmp = 0
+    for i in range(w):
+        for j in range(h):
+            pixCount[mt[i][j]] += 1
+
+    for i in range(grayScale):
+        pixPro[i] = pixCount[i] * 1.0/ pixSum
+    
+    
+    for i in range(grayScale-1):  # 0~255灰度测试是哪一个
+        w0 = w1 = u0tmp = u1tmp = u0 = u1 =deltaTmp = 0.0
+        for j in range(grayScale-1):
+            if j<=i:        # 背景
+                w0 += float(pixPro[j])
+                u0tmp += j * float(pixPro[j])
+            else:           # 前景
+                w1 += float(pixPro[j])
+                u1tmp += j *float(pixPro[j])
+
+        if float(w1)!=0.0 and float(w0) !=0.0:
+            u0 = u0tmp /w0
+            u1 = u1tmp /w1        
+            deltaTmp = w0*w1*(u0-u1)**2
+            if deltaTmp > deltaMax: 
+                deltaMax = deltaTmp
+                th = i
+    mt_c = mt.copy()
+
+    for i in range(w):
+        for j in range(h):
+            if mt_c[i][j] >= th:
+                mt_c[i][j] = 255
+            else:
+                mt_c[i][j] = 0
+    
+    im2 = Image.fromarray(mt_c)
+    return im, im2
